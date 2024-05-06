@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import marker from '../src/images/marker.png';
+import marker from './images/marker.png';
 
 function App() {
   const [map, setMap] = useState(null);
   const [curMarker, setCurMarker] = useState(null);
   const [first, setFirst] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -26,7 +27,7 @@ function App() {
       center: chicago,
       mapTypeId: window.google.maps.MapTypeId.ROADMAP,
     };
-    const newMap = new window.google.maps.Map(document.getElementById('map_canvas'), myOptions);
+    const newMap = new window.google.maps.Map(document.getElementById('map_canva'), myOptions);
     setMap(newMap);
   };
 
@@ -58,28 +59,32 @@ function App() {
     document.getElementById('more-info-description').innerHTML = description;
   };
 
-  return (
-    <div id="page-wrap">
-      <ul id="locations">
-        <li onMouseEnter={() => handleMouseEnter(41.9786, -87.9047, "O'Hare Airport", "Flights n' stuff")}>
-          <h3>O'Hare Airport</h3>
-          <p>Flights n' stuff</p>
-        </li>
-        <li onMouseEnter={() => handleMouseEnter(41.927118, -87.697621, "Bueno Terra", "World-class Italian")}>
-          <h3>Bueno Terra</h3>
-          <p>World-class Italian</p>
-        </li>
-        <li onMouseEnter={() => handleMouseEnter(41.921735, -87.664688, "Pequod's Pizza", "Unique pan-style pizza")}>
-          <h3>Pequod's Pizza</h3>
-          <p>Unique pan-style pizza</p>
-        </li>
-        <li onMouseEnter={() => handleMouseEnter(41.927568, -87.705201, "The Rocking Horse", "Nice bar")}>
-          <h3>The Rocking Horse</h3>
-          <p>Nice bar</p>
-        </li>
-      </ul>
+  const locations = [
+    { lat: 41.9786, lng: -87.9047, title: "Starbucks & Özal", description: "Flights n' stuff", image: "https://wallpapers.com/images/featured/starbucks-ack1avygrxnhaxjq.jpg" },
+    { lat: 41.927118, lng: -87.697621, title: "Soulmate & Özal", description: "World-class Italian", image: "https://media.licdn.com/dms/image/C4E1BAQHAKEiwPMIU4Q/company-background_10000/0/1584569238156/soulmate_coffee_cover?e=2147483647&v=beta&t=cizh77FzwyGUAleLp5HfYpbnMLZODcAj4ZSMwW-Amgw" },
+    { lat: 41.921735, lng: -87.664688, title: "Kahve Dünyası & Özal", description: "Unique pan-style pizza", image: "https://mir-s3-cdn-cf.behance.net/project_modules/fs/9bfe3e79592869.5cdeb80750008.jpg" },
+    { lat: 41.927568, lng: -87.705201, title: "Chocolabs", description: "Nice bar", image: "https://images.alphacoders.com/133/1330494.png" },
+  ];
 
-      <div id="map_canvas"></div>
+  return (
+    <div className='w-full container'>
+      <div id="map_canva" className='h-full'></div>
+      <div className='flex justify-center items-center'>
+        <ul id="locations" className='absolute bottom-0 p-2 w-11/12 rounded-xl shadow-lg'>
+          {locations.map((location, index) => (
+            <li key={index} className="p-3 w-4/5 background" onMouseEnter={() => handleMouseEnter(location.lat, location.lng, location.title, location.description)}>
+              <img src={location.image} className='rounded-t-xl w-full h-2/5' alt='alt'/>
+              <div className='p-3 div bg-white rounded-b-xl'>
+                <h1 className='font-semibold title mb-1'>{location.title}</h1>
+                <p className='title text-sm'>{location.title}</p>
+                <div className='flex justify-center items-center button mt-3'>
+                  <button className='title'>Show The Menu</button>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div id="more-info">
         <div>
