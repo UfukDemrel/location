@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import markerImage from './images/marker.png';
 import './App.css';
-import marker from './images/marker.png';
 
-function App() {
+function MyMap() {
   const [map, setMap] = useState(null);
   const [curMarker, setCurMarker] = useState(null);
   const [first, setFirst] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -47,7 +46,7 @@ function App() {
     const newMarker = new window.google.maps.Marker({
       position: pointToMoveTo,
       map: map,
-      icon: {marker},
+      icon: markerImage,
     });
 
     newMarker.addListener('click', handleMarkerClick);
@@ -96,4 +95,4 @@ function App() {
   );
 }
 
-export default App;
+export default MyMap;
