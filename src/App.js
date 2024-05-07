@@ -10,6 +10,7 @@ function App() {
   const [map, setMap] = useState(null);
   const [curMarker, setCurMarker] = useState(null);
   const [first, setFirst] = useState(true);
+  const [coffee, setCoffee] = useState([]);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -62,19 +63,28 @@ function App() {
     document.getElementById('more-info-description').innerHTML = description;
   };
 
-  const locations = [
-    { lat: 41.9786, lng: -87.9047, title: "Starbucks & Özal", description: "Relaxing hours", image: "https://wallpapers.com/images/featured/starbucks-ack1avygrxnhaxjq.jpg" },
-    { lat: 41.927118, lng: -87.697621, title: "Soulmate & Özal", description: "Views and coffee", image: "https://media.licdn.com/dms/image/C4E1BAQHAKEiwPMIU4Q/company-background_10000/0/1584569238156/soulmate_coffee_cover?e=2147483647&v=beta&t=cizh77FzwyGUAleLp5HfYpbnMLZODcAj4ZSMwW-Amgw" },
-    { lat: 41.921735, lng: -87.664688, title: "Kahve Dünyası & Özal", description: "Coffee journey", image: "https://mir-s3-cdn-cf.behance.net/project_modules/fs/9bfe3e79592869.5cdeb80750008.jpg" },
-    { lat: 41.927568, lng: -87.705201, title: "Chocolabs", description: "Chocolate waterfall", image: "https://images.alphacoders.com/133/1330494.png" },
-  ];
-
   const settings = {
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
   };
 
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/ufukdemrel/mapdata/main/data.json")
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return res.json();
+      })
+      .then(data => {
+        setCoffee(data);
+        console.log("Data: ", data);
+      })
+      .catch(err => console.error(err));
+  }, []);
+  
+  
   return (
     <div className='mx-auto flex flex-col md:flex-row'>
       <div className='w-full md:w-3/5 h-96 md:h-screen overflow-y-auto'>
@@ -83,7 +93,7 @@ function App() {
 
       <div className='w-full md:w-2/5 flex flex-col'>
         <Slider {...settings}>
-          {locations.map((location, index) => (
+          {coffee.map((location, index) => (
             <div key={index} className="background block m-auto" onMouseEnter={() => handleMouseEnter(location.lat, location.lng, location.title, location.description)}>
               <img src={location.image} className='rounded-t-2xl w-full h-40 md:h-60 object-cover' alt='location'/>
               <div className='p-3 div bg-white rounded-b-2xl'>
