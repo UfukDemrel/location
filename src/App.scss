@@ -1,4 +1,4 @@
-.background:hover div {
+.slick-active .background div {
   background-color: black !important;
   .title {
     color: white;
@@ -7,3 +7,49 @@
     border: 2px solid white;
   }
 }
+
+.background{
+    width: 70% !important;
+    display: block !important;
+}
+
+.slick-list {
+    margin-top: -30px;
+}
+
+body {
+    font-family: 'SF Pro Display', sans-serif;
+  }
+  
+  #map_canva {
+    width: 100%;
+    float: left;
+    position: absolute !important;
+  }
+  
+  .button{
+    border: 2px solid black;
+    border-radius: 6px;
+    padding: 5px;
+    color: black;
+  }
+  
+  #locations {
+    display: flex;
+    overflow-x: auto;
+  }
+  
+  li {
+    flex: 0 0 auto;
+    margin-top: auto;
+    scroll-snap-align: start;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .gmnoprint{
+    display: none;
+  }
+  
+  .slick-arrow{
+    display: none !important;
+  }

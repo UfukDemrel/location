@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 import markerImage from './images/marker.png';
 import './App.css';
 import './App.scss';
@@ -66,6 +69,12 @@ function App() {
     { lat: 41.927568, lng: -87.705201, title: "Chocolabs", description: "Chocolate waterfall", image: "https://images.alphacoders.com/133/1330494.png" },
   ];
 
+  const settings = {
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   return (
     <div className='mx-auto flex flex-col md:flex-row'>
       <div className='w-full md:w-3/5 h-96 md:h-screen overflow-y-auto'>
@@ -73,28 +82,28 @@ function App() {
       </div>
 
       <div className='w-full md:w-2/5 flex flex-col'>
-        <ul id="locations" className='flex-1 md:w-11/12 overflow-y-auto absolute bottom-0 p-2 w-11/12 rounded-xl'>
+        <Slider {...settings}>
           {locations.map((location, index) => (
-            <li key={index} className="p-3 mb-3 background w-4/5 shadow" onMouseEnter={() => handleMouseEnter(location.lat, location.lng, location.title, location.description)}>
-              <img src={location.image} className='rounded-t-xl w-full h-40 md:h-60 object-cover' alt='location'/>
-              <div className='p-3 div bg-white rounded-b-xl'>
+            <div key={index} className="background block m-auto" onMouseEnter={() => handleMouseEnter(location.lat, location.lng, location.title, location.description)}>
+              <img src={location.image} className='rounded-t-2xl w-full h-40 md:h-60 object-cover' alt='location'/>
+              <div className='p-3 div bg-white rounded-b-2xl'>
                 <h1 className='font-semibold title mb-1'>{location.title}</h1>
                 <p className='text-sm title'>{location.description}</p>
                 <div className='flex justify-center items-center mt-3'>
                   <button className='button title w-full font-semibold text-sm'>Show the menu</button>
                 </div>
               </div>
-            </li>
+            </div>
           ))}
-        </ul>
+        </Slider>
       </div>
 
-      <div id="more-info" className='w-full'>
+      {/* <div id="more-info" className='w-full'>
         <div>
           <h2 id="more-info-title">More Info</h2>
           <p id="more-info-description">Hover over location on the left. (JavaScript must be enabled)</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
