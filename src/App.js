@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import markerImage from './images/marker.png';
 import './App.css';
+import './App.scss';
 
-function MyMap() {
+function App() {
   const [map, setMap] = useState(null);
   const [curMarker, setCurMarker] = useState(null);
   const [first, setFirst] = useState(true);
@@ -59,25 +60,28 @@ function MyMap() {
   };
 
   const locations = [
-    { lat: 41.9786, lng: -87.9047, title: "Starbucks & Özal", description: "Flights n' stuff", image: "https://wallpapers.com/images/featured/starbucks-ack1avygrxnhaxjq.jpg" },
-    { lat: 41.927118, lng: -87.697621, title: "Soulmate & Özal", description: "World-class Italian", image: "https://media.licdn.com/dms/image/C4E1BAQHAKEiwPMIU4Q/company-background_10000/0/1584569238156/soulmate_coffee_cover?e=2147483647&v=beta&t=cizh77FzwyGUAleLp5HfYpbnMLZODcAj4ZSMwW-Amgw" },
-    { lat: 41.921735, lng: -87.664688, title: "Kahve Dünyası & Özal", description: "Unique pan-style pizza", image: "https://mir-s3-cdn-cf.behance.net/project_modules/fs/9bfe3e79592869.5cdeb80750008.jpg" },
-    { lat: 41.927568, lng: -87.705201, title: "Chocolabs", description: "Nice bar", image: "https://images.alphacoders.com/133/1330494.png" },
+    { lat: 41.9786, lng: -87.9047, title: "Starbucks & Özal", description: "Relaxing hours", image: "https://wallpapers.com/images/featured/starbucks-ack1avygrxnhaxjq.jpg" },
+    { lat: 41.927118, lng: -87.697621, title: "Soulmate & Özal", description: "Views and coffee", image: "https://media.licdn.com/dms/image/C4E1BAQHAKEiwPMIU4Q/company-background_10000/0/1584569238156/soulmate_coffee_cover?e=2147483647&v=beta&t=cizh77FzwyGUAleLp5HfYpbnMLZODcAj4ZSMwW-Amgw" },
+    { lat: 41.921735, lng: -87.664688, title: "Kahve Dünyası & Özal", description: "Coffee journey", image: "https://mir-s3-cdn-cf.behance.net/project_modules/fs/9bfe3e79592869.5cdeb80750008.jpg" },
+    { lat: 41.927568, lng: -87.705201, title: "Chocolabs", description: "Chocolate waterfall", image: "https://images.alphacoders.com/133/1330494.png" },
   ];
 
   return (
-    <div className='w-full container'>
-      <div id="map_canva" className='h-full'></div>
-      <div className='flex justify-center items-center'>
-        <ul id="locations" className='absolute bottom-0 p-2 w-11/12 rounded-xl shadow-lg'>
+    <div className='mx-auto flex flex-col md:flex-row'>
+      <div className='w-full md:w-3/5 h-96 md:h-screen overflow-y-auto'>
+        <div id="map_canva" className='h-full'></div>
+      </div>
+
+      <div className='w-full md:w-2/5 flex flex-col'>
+        <ul id="locations" className='flex-1 md:w-11/12 overflow-y-auto absolute bottom-0 p-2 w-11/12 rounded-xl'>
           {locations.map((location, index) => (
-            <li key={index} className="p-3 w-4/5 background" onMouseEnter={() => handleMouseEnter(location.lat, location.lng, location.title, location.description)}>
-              <img src={location.image} className='rounded-t-xl w-full h-2/5' alt='alt'/>
+            <li key={index} className="p-3 mb-3 background w-4/5 shadow" onMouseEnter={() => handleMouseEnter(location.lat, location.lng, location.title, location.description)}>
+              <img src={location.image} className='rounded-t-xl w-full h-40 md:h-60 object-cover' alt='location'/>
               <div className='p-3 div bg-white rounded-b-xl'>
                 <h1 className='font-semibold title mb-1'>{location.title}</h1>
-                <p className='title text-sm'>{location.title}</p>
-                <div className='flex justify-center items-center button mt-3'>
-                  <button className='title'>Show The Menu</button>
+                <p className='text-sm title'>{location.description}</p>
+                <div className='flex justify-center items-center mt-3'>
+                  <button className='button title w-full font-semibold text-sm'>Show the menu</button>
                 </div>
               </div>
             </li>
@@ -85,7 +89,7 @@ function MyMap() {
         </ul>
       </div>
 
-      <div id="more-info">
+      <div id="more-info" className='w-full'>
         <div>
           <h2 id="more-info-title">More Info</h2>
           <p id="more-info-description">Hover over location on the left. (JavaScript must be enabled)</p>
@@ -95,4 +99,4 @@ function MyMap() {
   );
 }
 
-export default MyMap;
+export default App;
