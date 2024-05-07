@@ -9,7 +9,7 @@ function MyMap() {
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = 'http://maps.google.com/maps/api/js?sensor=true';
+    script.src = 'https://maps.google.com/maps/api/js?sensor=true';
     script.async = true;
     script.onload = initMap;
     document.body.appendChild(script);
