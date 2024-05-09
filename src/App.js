@@ -11,7 +11,11 @@ function App() {
   const [curMarker, setCurMarker] = useState(null);
   const [first, setFirst] = useState(true);
   const [coffee, setCoffee] = useState([]);
-
+  const [modal, setModal] = useState(false);
+  const [clickedLocationId, setClickedLocationId] = useState(null);
+  const [clickedLocation, setClickedLocation] = useState(null);
+  const [menuId, setMenuId] = useState(null);
+  
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://maps.google.com/maps/api/js?sensor=true';
@@ -59,8 +63,8 @@ function App() {
     setCurMarker(newMarker);
     setFirst(false);
 
-    document.getElementById('more-info-title').innerHTML = title;
-    document.getElementById('more-info-description').innerHTML = description;
+    // document.getElementById('more-info-title').innerHTML = title;
+    // document.getElementById('more-info-description').innerHTML = description;
   };
 
   const settings = {
@@ -83,7 +87,14 @@ function App() {
       })
       .catch(err => console.error(err));
   }, []);
-  
+
+  const handleMenuClick = (id) => {
+    setClickedLocationId(id);
+    const clickedLocation = coffee.find(location => location.id === id);
+    setClickedLocation(clickedLocation);
+    setMenuId(clickedLocation.menu.id);
+    setModal(true);
+  };
   
   return (
     <div className='mx-auto flex flex-col md:flex-row'>
@@ -100,7 +111,7 @@ function App() {
                 <h1 className='font-semibold title mb-1'>{location.title}</h1>
                 <p className='text-sm title'>{location.description}</p>
                 <div className='flex justify-center items-center mt-3'>
-                  <button className='button title w-full font-semibold text-sm'>Show the menu</button>
+                  <button id={location.id} onClick={() => handleMenuClick(location.id)} className='button title w-full font-semibold text-sm'>Show the menu</button>
                 </div>
               </div>
             </div>
@@ -108,12 +119,30 @@ function App() {
         </Slider>
       </div>
 
-      {/* <div id="more-info" className='w-full'>
-        <div>
-          <h2 id="more-info-title">More Info</h2>
-          <p id="more-info-description">Hover over location on the left. (JavaScript must be enabled)</p>
+      {modal && (
+        <div className='w-full fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center'>
+          <div className="w-4/5 bg-white rounded-2xl h-4/5">
+            <div className='flex justify-end text-right absolute p-2 cursor-pointer' style={{width: 'inherit'}} onClick={() => setModal(false)}>
+              <svg fill="white" width="2rem" height="2rem" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm3.707,12.293a1,1,0,1,1-1.414,1.414L12,13.414,9.707,15.707a1,1,0,0,1-1.414-1.414L10.586,12,8.293,9.707A1,1,0,0,1,9.707,8.293L12,10.586l2.293-2.293a1,1,0,0,1,1.414,1.414L13.414,12Z"/></svg>
+            </div>
+            {clickedLocation && (
+              <div>
+              <img className='mb-2 rounded-t-2xl' src={clickedLocation.image2} alt='alt'/>
+              <div className='p-3'>
+                <h1 className='font-semibold title'>{clickedLocation.title}</h1>
+                <p className='text-sm title'>{clickedLocation.description}</p>
+                <div className='mt-2' id={clickedLocation.menu.id}>
+                  {clickedLocation.menu.map((click, index) => (
+                    <div className='font-semibold ghost p-2 mb-2 rounded-lg' key={index}>{click.name}</div>
+                  ))}
+                </div>
+              </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div> */}
+      )}
+
     </div>
   );
 }
