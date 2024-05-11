@@ -53,11 +53,33 @@ body {
   .gmnoprint{
     display: none;
   }
-  
-  .slick-arrow{
-    display: none !important;
+
+  .slick-next {
+    right: 0px;
   }
 
-  .slowy{
-    transition: opacity 0.3s ease-in-out;
+  .slick-prev {
+    left: 0px;
   }
+
+  .slick-prev:before {
+    display: none;
+  }
+
+  .slick-next:before {
+    display: none;
+  }
+
+  .slick-arrow{
+    display: flex !important;
+    align-items: center;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  }
+
+  .slick-arrow svg{
+    background: rgb(214, 214, 214);
+    border-radius: 5px;
+    width: 25px;
+    height: 25px;
+  }
+

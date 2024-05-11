@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Slider from "react-slick";
 
 const LocationModal = ({ closeModal, clickedLocation }) => {
   const [openMenus, setOpenMenus] = useState(Array(clickedLocation.menu.length).fill(false));
@@ -13,6 +14,26 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
     const newOpenMenus = [...openMenus];
     newOpenMenus[index] = false;
     setOpenMenus(newOpenMenus);
+  };
+
+  const settings = {
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    nextArrow: (
+        <div className="custom-prev-arrow" onClick={() => {}}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18L15 12L9 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      ),
+      prevArrow: (
+        <div className="custom-next-arrow" onClick={() => {}}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      )
   };
 
   return (
@@ -38,16 +59,15 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                         <h1 className="font-semibold">{click.name}</h1>
                       </div>
                       {openMenus[index] ? (
-                        <svg className="slowy" onClick={() => closeMenu(index)} width="1.5rem" height="1.5rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg onClick={() => closeMenu(index)} width="2rem" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="24" height="24" fill="white"/>
-                            <path d="M6 12H18" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M6 12H18" stroke="#000000" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       ) : (
                         <svg
-                          className="slowy"
                           onClick={() => toggleMenu(index)}
-                          width="1.5rem"
-                          height="1.5rem"
+                          width="2rem"
+                          height="2rem"
                           viewBox="0 0 24 24"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -59,14 +79,14 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                       )}
                     </div>
                     {openMenus[index] && (
-                      <div>
+                      <Slider {...settings}>
                         {click.data.map((data, dataIndex) => (
                           <div key={dataIndex} id={data.id} className="flex flex-col items-center gap-1">
                             <div>{data.name}</div>
                             {data.image && <img src={data.image} alt={data.name} className=" rounded-lg" />}
                           </div>
                         ))}
-                      </div>
+                      </Slider>
                     )}
                   </div>
                 ))}
