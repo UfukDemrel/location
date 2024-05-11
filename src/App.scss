@@ -57,3 +57,7 @@ body {
   .slick-arrow{
     display: none !important;
   }
+
+  .slowy{
+    transition: opacity 0.3s ease-in-out;
+  }

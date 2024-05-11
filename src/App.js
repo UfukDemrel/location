@@ -5,6 +5,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import markerImage from './images/marker.png';
 import './App.css';
 import './App.scss';
+import LocationModal from './components/LocationModal';
 
 function App() {
   const [map, setMap] = useState(null);
@@ -125,20 +126,10 @@ function App() {
             <div className='flex justify-end text-right absolute p-2 cursor-pointer' style={{width: 'inherit'}} onClick={() => setModal(false)}>
               <svg fill="white" width="2rem" height="2rem" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm3.707,12.293a1,1,0,1,1-1.414,1.414L12,13.414,9.707,15.707a1,1,0,0,1-1.414-1.414L10.586,12,8.293,9.707A1,1,0,0,1,9.707,8.293L12,10.586l2.293-2.293a1,1,0,0,1,1.414,1.414L13.414,12Z"/></svg>
             </div>
-            {clickedLocation && (
-              <div>
-              <img className='mb-2 rounded-t-2xl' src={clickedLocation.image2} alt='alt'/>
-              <div className='p-3'>
-                <h1 className='font-semibold title'>{clickedLocation.title}</h1>
-                <p className='text-sm title'>{clickedLocation.description}</p>
-                <div className='mt-2' id={clickedLocation.menu.id}>
-                  {clickedLocation.menu.map((click, index) => (
-                    <div className='font-semibold ghost p-2 mb-2 rounded-lg' key={index}>{click.name}</div>
-                  ))}
-                </div>
-              </div>
-              </div>
-            )}
+            <LocationModal
+              closeModal={() => setModal(false)}
+              clickedLocation={clickedLocation}
+            />
           </div>
         </div>
       )}
