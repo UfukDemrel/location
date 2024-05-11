@@ -122,7 +122,7 @@ function App() {
 
       {modal && (
         <div className='w-full fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center'>
-          <div className="w-4/5 bg-white rounded-2xl h-4/5">
+          <div className="w-4/5 bg-white rounded-2xl">
             <div className='flex justify-end text-right absolute p-2 cursor-pointer' style={{width: 'inherit'}} onClick={() => setModal(false)}>
               <svg fill="white" width="2rem" height="2rem" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm3.707,12.293a1,1,0,1,1-1.414,1.414L12,13.414,9.707,15.707a1,1,0,0,1-1.414-1.414L10.586,12,8.293,9.707A1,1,0,0,1,9.707,8.293L12,10.586l2.293-2.293a1,1,0,0,1,1.414,1.414L13.414,12Z"/></svg>
             </div>

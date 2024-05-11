@@ -73,13 +73,74 @@ body {
   .slick-arrow{
     display: flex !important;
     align-items: center;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    z-index: 10;
   }
 
   .slick-arrow svg{
-    background: rgb(214, 214, 214);
+    background: black;
     border-radius: 5px;
     width: 25px;
     height: 25px;
   }
 
+  .slick-track{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    color: black;
+    padding: 4px 5px;
+    border: 2px solid black;
+  }
+
+  .quantity-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .quantity-input {
+    outline: none;
+    user-select: none;
+    text-align: center;
+    width: 47px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+  }
+  .quantity-input::-webkit-inner-spin-button,
+  .quantity-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  .btn {
+    display: inline-block;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    text-transform: uppercase;
+    border: none;
+  }
+
+  .btn5 {
+    border: 0;
+    letter-spacing: 0.05em;
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+  }
+
+  .btn5:hover {
+    color: white;
+    background-color: black;
+    border: 2px solid #ffffff;
+  }
