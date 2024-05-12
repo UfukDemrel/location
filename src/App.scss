@@ -93,54 +93,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: white;
-    color: black;
-    padding: 4px 5px;
-    border: 2px solid black;
-  }
-
-  .quantity-btn svg {
-    width: 15px;
-    height: 15px;
-  }
-
-  .quantity-input {
-    outline: none;
-    user-select: none;
-    text-align: center;
-    width: 47px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-  }
-  .quantity-input::-webkit-inner-spin-button,
-  .quantity-input::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  
-  .btn {
-    display: inline-block;
-    font-size: 14px;
-    text-align: center;
-    cursor: pointer;
-    font-weight: 700;
-    text-transform: uppercase;
-    border: none;
   }
 
   .btn5 {
-    border: 0;
     letter-spacing: 0.05em;
-    background-color: white;
-    color: black;
-    border: 2px solid black;
   }
 
   .btn5:hover {
     color: white;
     background-color: black;
-    border: 2px solid #ffffff;
+  }
+
+  .btn5:hover svg{
+    fill: white;
   }
