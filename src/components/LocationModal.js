@@ -25,6 +25,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
     nextArrow: (
       <div className="custom-prev-arrow" onClick={() => {}}>
         <svg
+          className="svg"
           width="24"
           height="24"
           viewBox="0 0 24 24"
@@ -44,6 +45,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
     prevArrow: (
       <div className="custom-next-arrow" onClick={() => {}}>
         <svg
+          className="svg"
           width="24"
           height="24"
           viewBox="0 0 24 24"
