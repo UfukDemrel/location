@@ -88,7 +88,6 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
           />
           <div className="p-3">
             <h1 className="font-semibold title">{clickedLocation.title}</h1>
-            <p className="text-sm title">{clickedLocation.description}</p>
             <div className="mt-2" id={clickedLocation.menu.id}>
               {clickedLocation.menu.map((click, index) => (
                 <div className="ghost rounded-lg p-2 mb-2" key={index}>

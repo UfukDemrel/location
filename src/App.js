@@ -6,6 +6,8 @@ import markerImage from './images/marker.png';
 import './App.css';
 import './App.scss';
 import LocationModal from './components/LocationModal';
+import PrevArrow from './components/PrevArrow';
+import NextArrow from './components/NextArrow';
 
 function App() {
   const [map, setMap] = useState(null);
@@ -16,7 +18,8 @@ function App() {
   const [clickedLocationId, setClickedLocationId] = useState(null);
   const [clickedLocation, setClickedLocation] = useState(null);
   const [menuId, setMenuId] = useState(null);
-  
+  const [showPrev, setShowPrev] = useState(false);
+
   useEffect(() => {
     const script = document.createElement('script');
     script.src = 'https://maps.google.com/maps/api/js?sensor=true';
@@ -63,17 +66,16 @@ function App() {
 
     setCurMarker(newMarker);
     setFirst(false);
-
-    // document.getElementById('more-info-title').innerHTML = title;
-    // document.getElementById('more-info-description').innerHTML = description;
   };
 
-  const settings = {
-    infinite: true,
+  const setting = {
+    speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    prevArrow: <PrevArrow showPrev={showPrev} />,
+    nextArrow: <NextArrow setShowPrev={setShowPrev} />,
   };
-
+  
   useEffect(() => {
     fetch("https://raw.githubusercontent.com/ufukdemrel/mapdata/main/data.json")
       .then(res => {
@@ -96,7 +98,7 @@ function App() {
     setMenuId(clickedLocation.menu.id);
     setModal(true);
   };
-  
+
   return (
     <div className='mx-auto flex flex-col md:flex-row'>
       <div className='w-full md:w-3/5 h-96 md:h-screen overflow-y-auto'>
@@ -104,10 +106,10 @@ function App() {
       </div>
 
       <div className='w-full md:w-2/5 flex flex-col'>
-        <Slider {...settings}>
+        <Slider {...setting}>
           {coffee.map((location, index) => (
             <div key={index} className="background block m-auto" onMouseEnter={() => handleMouseEnter(location.lat, location.lng, location.title, location.description)}>
-              <img src={location.image} className='rounded-t-2xl w-full h-40 md:h-60 object-cover' alt='location'/>
+              <img src={location.image} className='rounded-t-2xl w-full h-40 md:h-60 object-cover' alt='location' />
               <div className='p-3 div bg-white rounded-b-2xl'>
                 <h1 className='font-semibold title mb-1'>{location.title}</h1>
                 <p className='text-sm title'>{location.description}</p>
@@ -123,8 +125,8 @@ function App() {
       {modal && (
         <div className='w-full fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center'>
           <div className="w-4/5 bg-white rounded-2xl">
-            <div className='flex justify-end text-right absolute p-2 cursor-pointer' style={{width: 'inherit'}} onClick={() => setModal(false)}>
-              <svg fill="white" width="2rem" height="2rem" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm3.707,12.293a1,1,0,1,1-1.414,1.414L12,13.414,9.707,15.707a1,1,0,0,1-1.414-1.414L10.586,12,8.293,9.707A1,1,0,0,1,9.707,8.293L12,10.586l2.293-2.293a1,1,0,0,1,1.414,1.414L13.414,12Z"/></svg>
+            <div className='flex justify-end text-right absolute p-2 cursor-pointer' style={{ width: 'inherit' }} onClick={() => setModal(false)}>
+              <svg fill="white" width="2rem" height="2rem" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm3.707,12.293a1,1,0,1,1-1.414,1.414L12,13.414,9.707,15.707a1,1,0,0,1-1.414-1.414L10.586,12,8.293,9.707A1,1,0,0,1,9.707,8.293L12,10.586l2.293-2.293a1,1,0,0,1,1.414,1.414L13.414,12Z" /></svg>
             </div>
             <LocationModal
               closeModal={() => setModal(false)}

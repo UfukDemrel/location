@@ -71,7 +71,7 @@ body {
   }
 
   .slick-arrow{
-    display: flex !important;
+    display: flex;
     align-items: center;
     z-index: 10;
   }
@@ -95,15 +95,10 @@ body {
     justify-content: space-between;
   }
 
-  .btn5 {
-    letter-spacing: 0.05em;
+  .hidden {
+    display: none;
   }
-
-  .btn5:hover {
-    color: white;
-    background-color: black;
-  }
-
-  .btn5:hover svg{
-    fill: white;
+  
+  .visible {
+    display: block;
   }
