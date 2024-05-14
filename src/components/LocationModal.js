@@ -7,10 +7,10 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
   );
 
   const toggleMenu = (index) => {
-    const newOpenMenus = [...openMenus];
-    newOpenMenus[index] = !newOpenMenus[index];
+    const newOpenMenus = openMenus.map((menu, i) => (i === index ? !menu : false));
     setOpenMenus(newOpenMenus);
   };
+  
 
   const closeMenu = (index) => {
     const newOpenMenus = [...openMenus];
@@ -165,7 +165,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                           {data.size && (
                             <div className="flex justify-between items-center mt-3 mb-3">
                               {data.size.map((size) => (
-                                <div className="pl-3 pr-3 pt-1 pb-1 rounded-lg bg-slate-200 font-semibold text-sm" key={size.id}>{size.name}</div>
+                                <div className="pl-3 pr-3 pt-1 pb-1 rounded-lg bg-slate-200 font-semibold text-sm border-2 border-black" key={size.id}>{size.name}</div>
                               ))}
                             </div>
                           )}
