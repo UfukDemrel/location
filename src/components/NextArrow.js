@@ -16,12 +16,13 @@ const NextArrow = (props) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        background: 'black',
+        background: 'white',
         width: 'auto',
         height: 'auto',
         right: '15px',
         padding: '3px',
         borderRadius: '10px',
+        border: '2px solid black'
       }}
       onClick={() => {
         handleButton();
@@ -37,7 +38,7 @@ const NextArrow = (props) => {
       >
         <path
           d="M9 18L15 12L9 6"
-          stroke="white"
+          stroke="black"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"

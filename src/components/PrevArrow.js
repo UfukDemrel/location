@@ -4,7 +4,7 @@ const PrevArrow = (props) => {
   const { className, style, onClick, showPrev } = props;
 
   return (
-    <div className={className} style={{ ...style, display: showPrev ? "flex" : "none", justifyContent: 'center', lignItems: 'center', background: "black", width: 'auto', height: 'auto', left: '15px', padding: '3px', borderRadius: '10px' }} onClick={onClick}>
+    <div className={className} style={{ ...style, display: showPrev ? "flex" : "none", justifyContent: 'center', lignItems: 'center', background: "white", width: 'auto', height: 'auto', left: '15px', padding: '3px', borderRadius: '10px', border: '2px solid black'}} onClick={onClick}>
         <svg
           width="2rem"
           height="2rem"
@@ -14,7 +14,7 @@ const PrevArrow = (props) => {
         >
           <path
             d="M15 18L9 12L15 6"
-            stroke="white"
+            stroke="black"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"

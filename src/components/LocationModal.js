@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 
 const LocationModal = ({ closeModal, clickedLocation }) => {
+  const [activeSizeIndex, setActiveSizeIndex] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const [openMenus, setOpenMenus] = useState(
     Array(clickedLocation.menu.length).fill(false)
   );
@@ -11,11 +13,30 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
     setOpenMenus(newOpenMenus);
   };
   
-
   const closeMenu = (index) => {
     const newOpenMenus = [...openMenus];
     newOpenMenus[index] = false;
     setOpenMenus(newOpenMenus);
+  };
+
+  const increaseQuantity = () => {
+    setQuantity((prevQuantity) => {
+      if (prevQuantity < 10) {
+        return prevQuantity + 1;
+      } else {
+        return prevQuantity;
+      }
+    });
+  };
+
+  const decreaseQuantity = () => {
+    setQuantity((prevQuantity) => {
+      if (prevQuantity > 1) {
+        return prevQuantity - 1;
+      } else {
+        return prevQuantity;
+      }
+    });
   };
 
   const settings = {
@@ -164,32 +185,40 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
 
                           {data.size && (
                             <div className="flex justify-between items-center mt-3 mb-3">
-                              {data.size.map((size) => (
-                                <div className="pl-3 pr-3 pt-1 pb-1 rounded-lg bg-slate-200 font-semibold text-sm border-2 border-black" key={size.id}>{size.name}</div>
+                              {data.size.map((size, sizeIndex) => (
+                                <div
+                                  key={size.id}
+                                  className={`pl-3 pr-3 pt-1 pb-1 rounded-lg font-semibold text-sm border-2 bg-slate-200 border-black ${
+                                    sizeIndex === activeSizeIndex ? "active" : ""
+                                  }`}
+                                  onClick={() => setActiveSizeIndex(sizeIndex)}
+                                >
+                                  {size.name}
+                                </div>
                               ))}
                             </div>
                           )}
 
-                            <div class="flex justify-center rounded-lg mt-3 mb-3">
-                                <button class="border-2 border-slate-300 p-2 rounded-lg">
-                                    <svg viewBox="0 0 409.6 409.6" className="fill-slate-400" width="1rem" height="1rem">
+                          <div className="flex justify-center rounded-lg mt-3 mb-3">
+                            <button className="border-2 border-slate-300 p-2 rounded-lg" onClick={decreaseQuantity}>
+                              <svg viewBox="0 0 409.6 409.6" className="fill-slate-400" width="1rem" height="1rem">
                                         <g>
                                         <g>
                                             <path d="M392.533,187.733H17.067C7.641,187.733,0,195.374,0,204.8s7.641,17.067,17.067,17.067h375.467 c9.426,0,17.067-7.641,17.067-17.067S401.959,187.733,392.533,187.733z" />
                                         </g>
                                         </g>
-                                    </svg>
-                                </button>
-                                <input type="number" className="text-center" value="1" step="1" min="1" max="10" name="quantity"/>
-                                <button class="border-2 border-slate-300 p-2 rounded-lg">
-                                    <svg viewBox="0 0 426.66667 426.66667" className="fill-slate-400" width="1rem" height="1rem">
-                                        <path d="m405.332031 192h-170.664062v-170.667969c0-11.773437-9.558594-21.332031-21.335938-21.332031-11.773437 0-21.332031 9.558594-21.332031 21.332031v170.667969h-170.667969c-11.773437 0-21.332031 9.558594-21.332031 21.332031 0 11.777344 9.558594 21.335938 21.332031 21.335938h170.667969v170.664062c0 11.777344 9.558594 21.335938 21.332031 21.335938 11.777344 0 21.335938-9.558594 21.335938-21.335938v-170.664062h170.664062c11.777344 0 21.335938-9.558594 21.335938-21.335938 0-11.773437-9.558594-21.332031-21.335938-21.332031zm0 0" />
-                                    </svg>
-                                </button>
-                            </div>
+                              </svg>
+                            </button>
+                            <input type="number" className="text-center" value={quantity} onChange={(e) => setQuantity(e.target.value)} step="1" min="1" max="10" name="quantity"/>
+                            <button className="border-2 border-slate-300 p-2 rounded-lg" onClick={increaseQuantity}>
+                              <svg viewBox="0 0 426.66667 426.66667" className="fill-slate-400" width="1rem" height="1rem">
+                                <path d="m405.332031 192h-170.664062v-170.667969c0-11.773437-9.558594-21.332031-21.335938-21.332031-11.773437 0-21.332031 9.558594-21.332031 21.332031v170.667969h-170.667969c-11.773437 0-21.332031 9.558594-21.332031 21.332031 0 11.777344 9.558594 21.335938 21.332031 21.335938h170.667969v170.664062c0 11.777344 9.558594 21.335938 21.332031 21.335938 11.777344 0 21.335938-9.558594 21.335938-21.335938v-170.664062h170.664062c11.777344 0 21.335938-9.558594 21.335938-21.335938 0-11.773437-9.558594-21.332031-21.335938-21.332031zm0 0" />
+                              </svg>
+                            </button>
+                          </div>
 
                           <div className="flex justify-between items-center mt-3 mb-1">
-                            <div className="font-semibold">100TL</div>
+                          <div className="font-semibold">{data.price * quantity}₺</div>
                             <div className="flex justify-between items-center gap-3 bg-black text-white p-2 rounded-lg">
                               <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
                                 width="1.3rem" height="1.3rem" viewBox="0 0 512.000000 512.000000"
