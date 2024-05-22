@@ -4,9 +4,13 @@ import Slider from "react-slick";
 const LocationModal = ({ closeModal, clickedLocation }) => {
   const [activeSizeIndex, setActiveSizeIndex] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [checkout, setCheckout] = useState(false);
   const [openMenus, setOpenMenus] = useState(
     Array(clickedLocation.menu.length).fill(false)
   );
+  const [basePrice, setBasePrice] = useState(0);
+  const [sizePrice, setSizePrice] = useState(0);
+  const [activeButton, setActiveButton] = useState(null);
 
   const toggleMenu = (index) => {
     const newOpenMenus = openMenus.map((menu, i) => (i === index ? !menu : false));
@@ -37,6 +41,15 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
         return prevQuantity;
       }
     });
+  };
+
+  const handleSizeSelection = (sizeIndex, sizePrice) => {
+    setActiveSizeIndex(sizeIndex);
+    setSizePrice(sizePrice);
+  };
+
+  const handleButtonClick = (buttonIndex) => {
+    setActiveButton(buttonIndex);
   };
 
   const settings = {
@@ -110,7 +123,17 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
             alt="alt"
           />
           <div className="p-3">
-            <h1 className="font-semibold title">{clickedLocation.title}</h1>
+            
+            <div className="flex justify-between items-center">
+              <h1 className="font-semibold title">{clickedLocation.title}</h1>
+              { checkout && (
+                <div className="flex items-center gap-2 border-2 rounded-lg pl-2 pr-2 pt-1 pb-1 bg-lime-600">
+                  <h3 className="font-semibold text-white">Checkout</h3>
+                  <svg fill="white" width="1.3rem" height="1.3rem" viewBox="0 0 52 52" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"><path d="M38.67,27.35A11.33,11.33,0,1,1,27.35,38.67h0A11.34,11.34,0,0,1,38.67,27.35ZM20.36,37.63a4,4,0,1,1-4,4v0A4,4,0,0,1,20.36,37.63ZM42.8,34.07l-6.06,6.79L34,38.09a.79.79,0,0,0-1.11,0l0,0-1.11,1.07a.7.7,0,0,0-.07,1l.07.08L35.6,44a1.62,1.62,0,0,0,1.14.48A1.47,1.47,0,0,0,37.87,44l7.19-7.87a.83.83,0,0,0,0-1l-1.12-1.05a.79.79,0,0,0-1.11,0ZM8.2,2a2.42,2.42,0,0,1,2.25,1.7h0l.62,2.16H46.36A1.5,1.5,0,0,1,47.9,7.31a1.24,1.24,0,0,1-.06.47h0L43.66,22.43a1.42,1.42,0,0,1-.52.82,16.42,16.42,0,0,0-4.47-.64,16,16,0,0,0-5.47,1H19.36a2.2,2.2,0,0,0-2.22,2.18,2.11,2.11,0,0,0,.13.75h0v.08a2.26,2.26,0,0,0,2.17,1.62h7.1a16,16,0,0,0-2.77,4.61H16a2.32,2.32,0,0,1-2.25-1.7h0L6.5,6.62H4.33A2.37,2.37,0,0,1,2,4.22V4.16A2.46,2.46,0,0,1,4.48,2H8.2Z"/></svg>
+                </div>
+              )}
+            </div>
+
             <div className="mt-2" id={clickedLocation.menu.id}>
               {clickedLocation.menu.map((click, index) => (
                 <div className="ghost rounded-lg p-2 mb-2" key={index}>
@@ -191,7 +214,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                                   className={`pl-3 pr-3 pt-1 pb-1 rounded-lg font-semibold text-sm border-2 bg-slate-200 border-black ${
                                     sizeIndex === activeSizeIndex ? "active" : ""
                                   }`}
-                                  onClick={() => setActiveSizeIndex(sizeIndex)}
+                                  onClick={() => handleSizeSelection(sizeIndex, size.price)}
                                 >
                                   {size.name}
                                 </div>
@@ -200,17 +223,38 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                           )}
 
                           <div className="flex justify-center rounded-lg mt-3 mb-3">
-                            <button className="border-2 border-slate-300 p-2 rounded-lg" onClick={decreaseQuantity}>
+                            <button
+                              className={`border-2 border-slate-300 p-2 rounded-lg ${activeButton === "decrease" ? "number" : ""}`}
+                              onClick={() => {
+                                decreaseQuantity();
+                                handleButtonClick("decrease");
+                              }}
+                            >
                               <svg viewBox="0 0 409.6 409.6" className="fill-slate-400" width="1rem" height="1rem">
-                                        <g>
-                                        <g>
-                                            <path d="M392.533,187.733H17.067C7.641,187.733,0,195.374,0,204.8s7.641,17.067,17.067,17.067h375.467 c9.426,0,17.067-7.641,17.067-17.067S401.959,187.733,392.533,187.733z" />
-                                        </g>
-                                        </g>
+                                <g>
+                                  <g>
+                                    <path d="M392.533,187.733H17.067C7.641,187.733,0,195.374,0,204.8s7.641,17.067,17.067,17.067h375.467c9.426,0,17.067-7.641,17.067-17.067S401.959,187.733,392.533,187.733z" />
+                                  </g>
+                                </g>
                               </svg>
                             </button>
-                            <input type="number" className="text-center" value={quantity} onChange={(e) => setQuantity(e.target.value)} step="1" min="1" max="10" name="quantity"/>
-                            <button className="border-2 border-slate-300 p-2 rounded-lg" onClick={increaseQuantity}>
+                            <input
+                              type="number"
+                              className="text-center"
+                              value={quantity}
+                              onChange={(e) => setQuantity(e.target.value)}
+                              step="1"
+                              min="1"
+                              max="10"
+                              name="quantity"
+                            />
+                            <button
+                              className={`border-2 border-slate-300 p-2 rounded-lg ${activeButton === "increase" ? "number" : ""}`}
+                              onClick={() => {
+                                increaseQuantity();
+                                handleButtonClick("increase");
+                              }}
+                            >
                               <svg viewBox="0 0 426.66667 426.66667" className="fill-slate-400" width="1rem" height="1rem">
                                 <path d="m405.332031 192h-170.664062v-170.667969c0-11.773437-9.558594-21.332031-21.335938-21.332031-11.773437 0-21.332031 9.558594-21.332031 21.332031v170.667969h-170.667969c-11.773437 0-21.332031 9.558594-21.332031 21.332031 0 11.777344 9.558594 21.335938 21.332031 21.335938h170.667969v170.664062c0 11.777344 9.558594 21.335938 21.332031 21.335938 11.777344 0 21.335938-9.558594 21.335938-21.335938v-170.664062h170.664062c11.777344 0 21.335938-9.558594 21.335938-21.335938 0-11.773437-9.558594-21.332031-21.335938-21.332031zm0 0" />
                               </svg>
@@ -218,15 +262,23 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                           </div>
 
                           <div className="flex justify-between items-center mt-3 mb-1">
-                          <div className="font-semibold">{data.price * quantity}₺</div>
+                            <div className="font-semibold">{(data.price + sizePrice) * quantity}₺</div>
                             <div className="flex justify-between items-center gap-3 bg-black text-white p-2 rounded-lg">
-                              <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-                                width="1.3rem" height="1.3rem" viewBox="0 0 512.000000 512.000000"
-                                preserveAspectRatio="xMidYMid meet">
-
-                                <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                                fill="white" stroke="none">
-                                <path d="M2393 4785 c-314 -57 -591 -276 -714 -566 -67 -157 -72 -193 -77
+                              <svg
+                                version="1.0"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="1.3rem"
+                                height="1.3rem"
+                                viewBox="0 0 512.000000 512.000000"
+                                preserveAspectRatio="xMidYMid meet"
+                              >
+                                <g
+                                  transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
+                                  fill="white"
+                                  stroke="none"
+                                >
+                                  <path
+                                    d="M2393 4785 c-314 -57 -591 -276 -714 -566 -67 -157 -72 -193 -77
                                 -541 l-4 -318 -414 0 c-328 0 -421 -3 -447 -14 -42 -17 -85 -68 -92 -110 -8
                                 -42 269 -2383 291 -2457 48 -163 174 -314 324 -388 150 -74 98 -71 1300 -71
                                 1202 0 1150 -3 1300 71 150 74 276 225 324 388 22 74 299 2415 291 2457 -7 42
@@ -235,14 +287,12 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                                 439 -251 490 -491 11 -51 15 -141 15 -341 l0 -273 -640 0 -640 0 0 273 c0 315
                                 8 370 70 493 132 261 418 399 705 339z m-872 -1439 c103 -43 128 -177 48 -257
                                 -65 -65 -157 -65 -222 0 -124 123 13 325 174 257z m1600 0 c103 -43 128 -177
-                                48 -257 -112 -113 -296 -12 -267 146 18 94 128 150 219 111z"/>
+                                48 -257 -112 -113 -296 -12 -267 146 18 94 128 150 219 111z"
+                                  />
                                 </g>
                               </svg>
-                              <div className="text-sm">
-                                Shop Now
-                              </div>  
+                              <div onClick={() => setCheckout(true)} className="text-sm cursor-pointer">Shop Now</div>
                             </div>
-
                           </div>
                         </div>
                       ))}
