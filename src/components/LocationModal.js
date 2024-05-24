@@ -5,6 +5,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
   const [activeSizeIndex, setActiveSizeIndex] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [checkout, setCheckout] = useState(false);
+  const [payment, setPayment] = useState(false);
   const [openMenus, setOpenMenus] = useState(
     Array(clickedLocation.menu.length).fill(false)
   );
@@ -98,6 +99,46 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
     ),
   };
 
+  const handleShopNow = () => {
+    const selectedProduct = clickedLocation.menu[0].data[0]; // Örnek olarak, ilk menü ve ilk ürünü aldım
+  
+    const productInfo = {
+      id: selectedProduct.id,
+      name: selectedProduct.name,
+      image: selectedProduct.image,
+    };
+  
+    console.log("Selected Product:", productInfo);
+  
+    // Toplam adeti ve toplam fiyatı hesaplayacak fonksiyon
+    const calculateTotal = () => {
+      const totalPrice = (selectedProduct.price + sizePrice) * quantity; // Toplam fiyatı hesapla
+      return { quantity: quantity, totalPrice: totalPrice }; // Toplam adet ve toplam fiyatı bir nesne olarak döndür
+    };
+  
+    // Hesaplanan toplam adet ve toplam fiyatı al
+    const totalInfo = calculateTotal();
+  
+    // Konsola toplam adeti ve toplam fiyatı yazdır
+    console.log("Total Quantity:", totalInfo.quantity);
+    console.log("Total Price:", totalInfo.totalPrice);
+  
+    // Seçilen ürün bilgilerini bir nesne olarak oluşturalım
+    const cartItem = {
+      id: productInfo.id,
+      name: productInfo.name,
+      image: productInfo.image,
+      quantity: totalInfo.quantity,
+      totalPrice: totalInfo.totalPrice,
+    };
+  
+    // Local storage'a kayıt işlemi
+    const existingCartItems = JSON.parse(localStorage.getItem("cartItems")) || []; // Önceki sepet öğelerini al veya boş bir dizi oluştur
+    existingCartItems.push(cartItem); // Yeni öğeyi sepet öğelerine ekle
+    localStorage.setItem("cartItems", JSON.stringify(existingCartItems)); // Güncellenmiş sepet öğelerini local storage'a geri kaydet
+    setPayment(true);
+  };
+
   return (
     <>
       <div
@@ -122,16 +163,26 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
             src={clickedLocation.image2}
             alt="alt"
           />
+          
+        {payment 
+        ? (
           <div className="p-3">
-            
+            <div className="flex items-center mb-3">
+              <div className="w-2/5">
+                <svg className="border-2 border-solid border-black rounded-lg p-1 ghost" onClick={() => setPayment(false)} width="2rem" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7071 4.29289C12.0976 4.68342 12.0976 5.31658 11.7071 5.70711L6.41421 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H6.41421L11.7071 18.2929C12.0976 18.6834 12.0976 19.3166 11.7071 19.7071C11.3166 20.0976 10.6834 20.0976 10.2929 19.7071L3.29289 12.7071C3.10536 12.5196 3 12.2652 3 12C3 11.7348 3.10536 11.4804 3.29289 11.2929L10.2929 4.29289C10.6834 3.90237 11.3166 3.90237 11.7071 4.29289Z" fill="#000000"/>
+                </svg>
+              </div>
+              <div className="w-3/5 font-semibold">Checkout</div>
+            </div>
+
+            <div>sadasdsa</div>
+          </div>
+        )
+        : (
+          <div className="p-3">
             <div className="flex justify-between items-center">
               <h1 className="font-semibold title">{clickedLocation.title}</h1>
-              { checkout && (
-                <div className="flex items-center gap-2 border-2 rounded-lg pl-2 pr-2 pt-1 pb-1 bg-lime-600">
-                  <h3 className="font-semibold text-white">Checkout</h3>
-                  <svg fill="white" width="1.3rem" height="1.3rem" viewBox="0 0 52 52" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"><path d="M38.67,27.35A11.33,11.33,0,1,1,27.35,38.67h0A11.34,11.34,0,0,1,38.67,27.35ZM20.36,37.63a4,4,0,1,1-4,4v0A4,4,0,0,1,20.36,37.63ZM42.8,34.07l-6.06,6.79L34,38.09a.79.79,0,0,0-1.11,0l0,0-1.11,1.07a.7.7,0,0,0-.07,1l.07.08L35.6,44a1.62,1.62,0,0,0,1.14.48A1.47,1.47,0,0,0,37.87,44l7.19-7.87a.83.83,0,0,0,0-1l-1.12-1.05a.79.79,0,0,0-1.11,0ZM8.2,2a2.42,2.42,0,0,1,2.25,1.7h0l.62,2.16H46.36A1.5,1.5,0,0,1,47.9,7.31a1.24,1.24,0,0,1-.06.47h0L43.66,22.43a1.42,1.42,0,0,1-.52.82,16.42,16.42,0,0,0-4.47-.64,16,16,0,0,0-5.47,1H19.36a2.2,2.2,0,0,0-2.22,2.18,2.11,2.11,0,0,0,.13.75h0v.08a2.26,2.26,0,0,0,2.17,1.62h7.1a16,16,0,0,0-2.77,4.61H16a2.32,2.32,0,0,1-2.25-1.7h0L6.5,6.62H4.33A2.37,2.37,0,0,1,2,4.22V4.16A2.46,2.46,0,0,1,4.48,2H8.2Z"/></svg>
-                </div>
-              )}
             </div>
 
             <div className="mt-2" id={clickedLocation.menu.id}>
@@ -291,7 +342,8 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                                   />
                                 </g>
                               </svg>
-                              <div onClick={() => setCheckout(true)} className="text-sm cursor-pointer">Shop Now</div>
+                              
+                              <div onClick={handleShopNow} className="text-sm cursor-pointer">Shop Now</div>
                             </div>
                           </div>
                         </div>
@@ -302,6 +354,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
               ))}
             </div>
           </div>
+        )}
         </div>
       )}
     </>
