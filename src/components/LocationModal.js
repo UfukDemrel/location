@@ -9,7 +9,6 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
   const [openMenus, setOpenMenus] = useState(
     Array(clickedLocation.menu.length).fill(false)
   );
-  const [basePrice, setBasePrice] = useState(0);
   const [sizePrice, setSizePrice] = useState(0);
   const [activeButton, setActiveButton] = useState(null);
 
@@ -99,43 +98,25 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
     ),
   };
 
-  const handleShopNow = () => {
-    const selectedProduct = clickedLocation.menu[0].data[0]; // Örnek olarak, ilk menü ve ilk ürünü aldım
-  
-    const productInfo = {
+  const handleShopNow = (selectedProduct) => {
+    const calculateTotal = () => {
+      const totalPrice = (selectedProduct.price + sizePrice) * quantity;
+      return { quantity: quantity, totalPrice: totalPrice };
+    };
+
+    const totalInfo = calculateTotal();
+
+    const cartItem = {
       id: selectedProduct.id,
       name: selectedProduct.name,
       image: selectedProduct.image,
-    };
-  
-    console.log("Selected Product:", productInfo);
-  
-    // Toplam adeti ve toplam fiyatı hesaplayacak fonksiyon
-    const calculateTotal = () => {
-      const totalPrice = (selectedProduct.price + sizePrice) * quantity; // Toplam fiyatı hesapla
-      return { quantity: quantity, totalPrice: totalPrice }; // Toplam adet ve toplam fiyatı bir nesne olarak döndür
-    };
-  
-    // Hesaplanan toplam adet ve toplam fiyatı al
-    const totalInfo = calculateTotal();
-  
-    // Konsola toplam adeti ve toplam fiyatı yazdır
-    console.log("Total Quantity:", totalInfo.quantity);
-    console.log("Total Price:", totalInfo.totalPrice);
-  
-    // Seçilen ürün bilgilerini bir nesne olarak oluşturalım
-    const cartItem = {
-      id: productInfo.id,
-      name: productInfo.name,
-      image: productInfo.image,
       quantity: totalInfo.quantity,
       totalPrice: totalInfo.totalPrice,
     };
   
-    // Local storage'a kayıt işlemi
-    const existingCartItems = JSON.parse(localStorage.getItem("cartItems")) || []; // Önceki sepet öğelerini al veya boş bir dizi oluştur
-    existingCartItems.push(cartItem); // Yeni öğeyi sepet öğelerine ekle
-    localStorage.setItem("cartItems", JSON.stringify(existingCartItems)); // Güncellenmiş sepet öğelerini local storage'a geri kaydet
+    const existingCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    existingCartItems.push(cartItem);
+    localStorage.setItem("cartItems", JSON.stringify(existingCartItems));
     setPayment(true);
   };
 
@@ -342,8 +323,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                                   />
                                 </g>
                               </svg>
-                              
-                              <div onClick={handleShopNow} className="text-sm cursor-pointer">Shop Now</div>
+                              <div onClick={() => handleShopNow(data)} className="text-sm cursor-pointer">Shop Now</div>
                             </div>
                           </div>
                         </div>
