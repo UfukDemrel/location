@@ -4,7 +4,6 @@ import Slider from "react-slick";
 const LocationModal = ({ closeModal, clickedLocation }) => {
   const [activeSizeIndex, setActiveSizeIndex] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [checkout, setCheckout] = useState(false);
   const [payment, setPayment] = useState(false);
   const [openMenus, setOpenMenus] = useState(
     Array(clickedLocation.menu.length).fill(false)
@@ -43,9 +42,11 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
     });
   };
 
-  const handleSizeSelection = (sizeIndex, sizePrice) => {
+  const handleSizeSelection = (sizeIndex, sizePrice, sizeName) => {
     setActiveSizeIndex(sizeIndex);
     setSizePrice(sizePrice);
+  
+    localStorage.setItem("selectedSizeName", JSON.stringify(sizeName));
   };
 
   const handleButtonClick = (buttonIndex) => {
@@ -103,13 +104,14 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
       const totalPrice = (selectedProduct.price + sizePrice) * quantity;
       return { quantity: quantity, totalPrice: totalPrice };
     };
-
+  
     const totalInfo = calculateTotal();
-
+  
     const cartItem = {
       id: selectedProduct.id,
       name: selectedProduct.name,
       image: selectedProduct.image,
+      size: localStorage.getItem("selectedSizeName"),
       quantity: totalInfo.quantity,
       totalPrice: totalInfo.totalPrice,
     };
@@ -145,22 +147,48 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
             alt="alt"
           />
           
-        {payment 
-        ? (
-          <div className="p-3">
-            <div className="flex items-center mb-3">
-              <div className="w-2/5">
-                <svg className="border-2 border-solid border-black rounded-lg p-1 ghost" onClick={() => setPayment(false)} width="2rem" height="2rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M11.7071 4.29289C12.0976 4.68342 12.0976 5.31658 11.7071 5.70711L6.41421 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H6.41421L11.7071 18.2929C12.0976 18.6834 12.0976 19.3166 11.7071 19.7071C11.3166 20.0976 10.6834 20.0976 10.2929 19.7071L3.29289 12.7071C3.10536 12.5196 3 12.2652 3 12C3 11.7348 3.10536 11.4804 3.29289 11.2929L10.2929 4.29289C10.6834 3.90237 11.3166 3.90237 11.7071 4.29289Z" fill="#000000"/>
-                </svg>
+          {payment ? (
+            <div className="p-3">
+              <div className="flex items-center mb-3">
+                <div className="w-1/2">
+                  <svg
+                    className="border-2 border-solid border-black rounded-lg p-1 ghost"
+                    onClick={() => setPayment(false)}
+                    width="2rem"
+                    height="2rem"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M11.7071 4.29289C12.0976 4.68342 12.0976 5.31658 11.7071 5.70711L6.41421 11H20C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H6.41421L11.7071 18.2929C12.0976 18.6834 12.0976 19.3166 11.7071 19.7071C11.3166 20.0976 10.6834 20.0976 10.2929 19.7071L3.29289 12.7071C3.10536 12.5196 3 12.2652 3 12C3 11.7348 3.10536 11.4804 3.29289 11.2929L10.2929 4.29289C10.6834 3.90237 11.3166 3.90237 11.7071 4.29289Z"
+                      fill="#000000"
+                    />
+                  </svg>
+                </div>
+                <div className="w-1/2 font-semibold">Cart</div>
               </div>
-              <div className="w-3/5 font-semibold">Checkout</div>
-            </div>
 
-            <div>sadasdsa</div>
-          </div>
-        )
-        : (
+              <div className="flex flex-col gap-3">
+                {JSON.parse(localStorage.getItem("cartItems")).map((item, index) => (
+                  <div key={index} className="flex justify-around items-center p-2 ghost rounded-lg">
+                    <img src={item.image} alt={item.name} className="w-16 h-16" />
+                    <div className="flex flex-col">
+                      <div className="text-sm font-semibold mb-2">{item.name}</div>
+                      <div className="text-gray-500 text-xs font-semibold">{item.quantity} x {item.totalPrice}₺</div>
+                    </div>
+                  </div>
+                ))}
+                <div>
+                <button className="bg-green-300 p-2 w-full rounded-lg font-semibold">
+                  Checkout ({JSON.parse(localStorage.getItem("cartItems") || '[]').length})
+                </button>
+                </div>
+              </div>
+            </div>
+          ) : (
           <div className="p-3">
             <div className="flex justify-between items-center">
               <h1 className="font-semibold title">{clickedLocation.title}</h1>
@@ -243,10 +271,10 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                               {data.size.map((size, sizeIndex) => (
                                 <div
                                   key={size.id}
-                                  className={`pl-3 pr-3 pt-1 pb-1 rounded-lg font-semibold text-sm border-2 bg-slate-200 border-black ${
+                                  className={`pl-3 pr-3 pt-1 pb-1 rounded-lg font-semibold text-sm border-2 bg-green-300 border-black ${
                                     sizeIndex === activeSizeIndex ? "active" : ""
                                   }`}
-                                  onClick={() => handleSizeSelection(sizeIndex, size.price)}
+                                  onClick={() => handleSizeSelection(sizeIndex, size.price, size.name)}
                                 >
                                   {size.name}
                                 </div>
@@ -256,13 +284,13 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
 
                           <div className="flex justify-center rounded-lg mt-3 mb-3">
                             <button
-                              className={`border-2 border-slate-300 p-2 rounded-lg ${activeButton === "decrease" ? "number" : ""}`}
+                              className={`border-2 border-black p-2 rounded-lg ${activeButton === "decrease" ? "number" : ""}`}
                               onClick={() => {
                                 decreaseQuantity();
                                 handleButtonClick("decrease");
                               }}
                             >
-                              <svg viewBox="0 0 409.6 409.6" className="fill-slate-400" width="1rem" height="1rem">
+                              <svg viewBox="0 0 409.6 409.6" width="1rem" height="1rem">
                                 <g>
                                   <g>
                                     <path d="M392.533,187.733H17.067C7.641,187.733,0,195.374,0,204.8s7.641,17.067,17.067,17.067h375.467c9.426,0,17.067-7.641,17.067-17.067S401.959,187.733,392.533,187.733z" />
@@ -281,13 +309,13 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                               name="quantity"
                             />
                             <button
-                              className={`border-2 border-slate-300 p-2 rounded-lg ${activeButton === "increase" ? "number" : ""}`}
+                              className={`border-2 border-black p-2 rounded-lg ${activeButton === "increase" ? "number" : ""}`}
                               onClick={() => {
                                 increaseQuantity();
                                 handleButtonClick("increase");
                               }}
                             >
-                              <svg viewBox="0 0 426.66667 426.66667" className="fill-slate-400" width="1rem" height="1rem">
+                              <svg viewBox="0 0 426.66667 426.66667" width="1rem" height="1rem">
                                 <path d="m405.332031 192h-170.664062v-170.667969c0-11.773437-9.558594-21.332031-21.335938-21.332031-11.773437 0-21.332031 9.558594-21.332031 21.332031v170.667969h-170.667969c-11.773437 0-21.332031 9.558594-21.332031 21.332031 0 11.777344 9.558594 21.335938 21.332031 21.335938h170.667969v170.664062c0 11.777344 9.558594 21.335938 21.332031 21.335938 11.777344 0 21.335938-9.558594 21.335938-21.335938v-170.664062h170.664062c11.777344 0 21.335938-9.558594 21.335938-21.335938 0-11.773437-9.558594-21.332031-21.335938-21.332031zm0 0" />
                               </svg>
                             </button>
@@ -295,7 +323,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
 
                           <div className="flex justify-between items-center mt-3 mb-1">
                             <div className="font-semibold">{(data.price + sizePrice) * quantity}₺</div>
-                            <div className="flex justify-between items-center gap-3 bg-black text-white p-2 rounded-lg">
+                            <div className="flex justify-between items-center gap-3 bg-green-300 text-black p-2 rounded-lg font-semibold">
                               <svg
                                 version="1.0"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -306,7 +334,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                               >
                                 <g
                                   transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
-                                  fill="white"
+                                  fill="black"
                                   stroke="none"
                                 >
                                   <path
