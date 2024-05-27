@@ -148,7 +148,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
           />
           
           {payment ? (
-            <div className="p-3">
+            <div className="p-2 h-80 overflow-hidden flex flex-col">
               <div className="flex items-center mb-3">
                 <div className="w-1/2">
                   <svg
@@ -171,7 +171,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                 <div className="w-1/2 font-semibold">Cart</div>
               </div>
 
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 flex-grow overflow-auto p-2">
                 {JSON.parse(localStorage.getItem("cartItems")).map((item, index) => (
                   <div key={index} className="flex justify-around items-center p-2 ghost rounded-lg">
                     <img src={item.image} alt={item.name} className="w-16 h-16" />
@@ -182,19 +182,19 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                   </div>
                 ))}
                 <div>
-                <button className="bg-green-300 p-2 w-full rounded-lg font-semibold">
+                <button className={`${clickedLocation.color} p-2 w-full rounded-lg font-semibold`}>
                   Checkout ({JSON.parse(localStorage.getItem("cartItems") || '[]').length})
                 </button>
                 </div>
               </div>
             </div>
           ) : (
-          <div className="p-3">
+          <div className="p-3 h-80 overflow-hidden flex flex-col">
             <div className="flex justify-between items-center">
               <h1 className="font-semibold title">{clickedLocation.title}</h1>
             </div>
 
-            <div className="mt-2" id={clickedLocation.menu.id}>
+            <div className="mt-2 flex-grow overflow-auto p-2" id={clickedLocation.menu.id}>
               {clickedLocation.menu.map((click, index) => (
                 <div className="ghost rounded-lg p-2 mb-2" key={index}>
                   <div className="flex justify-between items-center">
@@ -271,7 +271,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                               {data.size.map((size, sizeIndex) => (
                                 <div
                                   key={size.id}
-                                  className={`pl-3 pr-3 pt-1 pb-1 rounded-lg font-semibold text-sm border-2 bg-green-300 border-black ${
+                                  className={`pl-3 pr-3 pt-1 pb-1 rounded-lg font-semibold text-sm border-2 ${clickedLocation.color} border-black ${
                                     sizeIndex === activeSizeIndex ? "active" : ""
                                   }`}
                                   onClick={() => handleSizeSelection(sizeIndex, size.price, size.name)}
@@ -323,7 +323,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
 
                           <div className="flex justify-between items-center mt-3 mb-1">
                             <div className="font-semibold">{(data.price + sizePrice) * quantity}₺</div>
-                            <div className="flex justify-between items-center gap-3 bg-green-300 text-black p-2 rounded-lg font-semibold">
+                            <div className={`flex justify-between items-center gap-3 border-2 border-black ${clickedLocation.color} text-black p-2 rounded-lg font-semibold`}>
                               <svg
                                 version="1.0"
                                 xmlns="http://www.w3.org/2000/svg"
