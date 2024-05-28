@@ -309,7 +309,7 @@ const LocationModal = ({ closeModal, clickedLocation }) => {
                               name="quantity"
                             />
                             <button
-                              className={`border-2 border-black p-2 rounded-lg bg-green-300 ${clickedLocation.color} ${activeButton === "increase" ? "number" : ""}`}
+                              className={`border-2 border-black p-2 rounded-lg ${clickedLocation.color} ${activeButton === "increase" ? "number" : ""}`}
                               onClick={() => {
                                 increaseQuantity();
                                 handleButtonClick("increase");
