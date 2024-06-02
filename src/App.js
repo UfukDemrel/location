@@ -15,7 +15,6 @@ function App() {
   const [first, setFirst] = useState(true);
   const [coffee, setCoffee] = useState([]);
   const [modal, setModal] = useState(false);
-  const [clickedLocationId, setClickedLocationId] = useState(null);
   const [clickedLocation, setClickedLocation] = useState(null);
   const [menuId, setMenuId] = useState(null);
   const [showPrev, setShowPrev] = useState(false);
@@ -75,7 +74,7 @@ function App() {
     prevArrow: <PrevArrow showPrev={showPrev} />,
     nextArrow: <NextArrow setShowPrev={setShowPrev} />,
   };
-  
+
   useEffect(() => {
     fetch("https://raw.githubusercontent.com/ufukdemrel/mapdata/main/data.json")
       .then(res => {
@@ -86,13 +85,15 @@ function App() {
       })
       .then(data => {
         setCoffee(data);
-        console.log("Data: ", data);
+
+        const coffeeColors = data.map(location => location.color);
+        console.log("Colors: ", coffeeColors); // This will log the array of colors to the console
+
       })
       .catch(err => console.error(err));
   }, []);
 
   const handleMenuClick = (id) => {
-    setClickedLocationId(id);
     const clickedLocation = coffee.find(location => location.id === id);
     setClickedLocation(clickedLocation);
     setMenuId(clickedLocation.menu.id);
@@ -122,7 +123,7 @@ function App() {
         </Slider>
       </div>
 
-      {modal && (
+      {modal && clickedLocation && (
         <div className='w-full fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-center'>
           <div className="w-4/5 bg-white rounded-2xl">
             <div className='flex justify-end text-right absolute p-2 cursor-pointer' style={{ width: 'inherit' }} onClick={() => setModal(false)}>
@@ -131,6 +132,7 @@ function App() {
             <LocationModal
               closeModal={() => setModal(false)}
               clickedLocation={clickedLocation}
+              color={clickedLocation.color}
             />
           </div>
         </div>
